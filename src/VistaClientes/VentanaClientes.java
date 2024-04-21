@@ -314,10 +314,10 @@ public class VentanaClientes extends javax.swing.JDialog {
         int totalClientes = cliente.size();
         String datos = "CEDULA: " + clientes.cedula + "\n";
                 datos += "NOMBRE: " + clientes.nombre + "\n";
-                datos += "APELLIDO: " + clientes.nombre + "\n";
-                datos += "CORREO: " + clientes.nombre + "\n";
+                datos += "APELLIDO: " + clientes.apellido + "\n";
+                datos += "CORREO: " + clientes.correo + "\n";
                 datos += "TELEFONO: " + clientes.telefono + "\n";
-                datos += "PLAN ELEGIDO: " + clientes.nombre + "\n";
+                datos += "PLAN ELEGIDO: " + clientes.planElegido + "\n";
                 datos += "INICIO DEL PLAN: " + clientes.inicioPlan + "\n";
                 datos += "FIN DEL PLAN: " + clientes.finPlan + "\n";
                 datos += "----------------------- \n";
