@@ -1,15 +1,23 @@
 package VistaClientes;
 
+import gestordeclientesgimnasio.Clientes;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 /**
  *
  * @author HP
  */
 public class VentanaClientes extends javax.swing.JDialog {
-
+    Clientes clientes = new Clientes();
+    
+    List<Clientes> cliente = new ArrayList<>();
     /**
      * Creates new form VentanaClientes
      */
@@ -47,6 +55,8 @@ public class VentanaClientes extends javax.swing.JDialog {
         radioPlanAnual = new javax.swing.JRadioButton();
         fechaInicioPlan = new com.toedter.calendar.JDateChooser();
         fechaFinPlan = new com.toedter.calendar.JDateChooser();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDescripcionPlan = new javax.swing.JTextArea();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -74,9 +84,9 @@ public class VentanaClientes extends javax.swing.JDialog {
 
         jLabel9.setText("FIN DEL PLAN:");
 
-        campoCedula.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoCedulaActionPerformed(evt);
+        campoCedula.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campoCedulaMouseClicked(evt);
             }
         });
         campoCedula.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -85,11 +95,47 @@ public class VentanaClientes extends javax.swing.JDialog {
             }
         });
 
+        campoNombre.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campoNombreMouseClicked(evt);
+            }
+        });
+
+        campoApellido.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campoApellidoMouseClicked(evt);
+            }
+        });
+
+        campoCorreo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campoCorreoMouseClicked(evt);
+            }
+        });
+
+        campoTelefono.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                campoTelefonoMouseClicked(evt);
+            }
+        });
+        campoTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                campoTelefonoKeyTyped(evt);
+            }
+        });
+
         grupoPlanesGimnasio.add(radioPlanMensual);
         radioPlanMensual.setText("PLAN MENSUAL");
 
         grupoPlanesGimnasio.add(radioPlanAnual);
         radioPlanAnual.setText("PLAN ANUAL");
+
+        txtDescripcionPlan.setEditable(false);
+        txtDescripcionPlan.setColumns(20);
+        txtDescripcionPlan.setRows(5);
+        txtDescripcionPlan.setText("Planes Disponibles:\n\n--- Plan Mensual ---\n\n-- Duración del plan: 30 días.\n\n-- Precio: $60.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,\nzona de masajes.\n\n--- Plan Anual ---\n\n-- Duración del plan: 1 año.\n\n-- Precio: $60.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,saunas,\nzona de masajes.");
+        txtDescripcionPlan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jScrollPane1.setViewportView(txtDescripcionPlan);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -119,44 +165,49 @@ public class VentanaClientes extends javax.swing.JDialog {
                     .addComponent(campoTelefono)
                     .addComponent(fechaInicioPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fechaFinPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(campoCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(campoApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(campoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(campoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(radioPlanMensual)
-                    .addComponent(radioPlanAnual))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8)
-                    .addComponent(fechaInicioPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(fechaFinPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(campoCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(campoApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(campoCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(campoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(radioPlanMensual)
+                            .addComponent(radioPlanAnual))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(fechaInicioPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addComponent(fechaFinPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
 
@@ -168,6 +219,11 @@ public class VentanaClientes extends javax.swing.JDialog {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -176,7 +232,7 @@ public class VentanaClientes extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(204, 204, 204)
                 .addComponent(jLabel1)
-                .addGap(0, 202, Short.MAX_VALUE))
+                .addGap(0, 314, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,10 +260,6 @@ public class VentanaClientes extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void campoCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCedulaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoCedulaActionPerformed
     //Se valida todos los campos que esten vacios
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         if(!validarDatosEnCampo(campoCedula, "Digite la cedula")) {
@@ -232,19 +284,82 @@ public class VentanaClientes extends javax.swing.JDialog {
         /*Obtenemos las fechas, si estan uno de los dos campos vacios
         manda un mensaje de aviso
         */
-        Date inicioPlan = fechaInicioPlan.getDate();
-        Date finPlan = fechaFinPlan.getDate();
-        if(inicioPlan == null || finPlan == null) {
+        clientes.inicioPlan = fechaInicioPlan.getDate();
+        clientes.finPlan = fechaFinPlan.getDate();
+        if(clientes.inicioPlan == null || clientes.finPlan == null) {
             JOptionPane.showMessageDialog(this, "Fechas de plan no ingresado");
         }
         //Verifica que el telefono tenga un texto
-        String telefono = campoTelefono.getText();
+        clientes.telefono = campoTelefono.getText();
         try {
-            long tel = Integer.parseInt(telefono);
+            long tel = Integer.parseInt(clientes.telefono);
         }catch(NumberFormatException error){
             JOptionPane.showMessageDialog(this, "El telefono debe ser numerico", "Validar", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        if (!validarEmail(campoCorreo.getText())) {
+            return;
+        }
+        //Mostrar y recuperar todos los datos
+        //telefono, inicioPlan y finPlan ya están arriba
+        clientes.cedula = campoCedula.getText();
+        clientes.nombre = campoNombre.getText();
+        clientes.apellido = campoApellido.getText();
+        clientes.correo = campoCorreo.getText();
+        clientes.planElegido = (radioPlanMensual.isSelected())
+                                ? radioPlanMensual.getText()
+                                : radioPlanAnual.getText();
+        //Datos
+        cliente.add(clientes);
+        int totalClientes = cliente.size();
+        String datos = "CEDULA: " + clientes.cedula + "\n";
+                datos += "NOMBRE: " + clientes.nombre + "\n";
+                datos += "APELLIDO: " + clientes.nombre + "\n";
+                datos += "CORREO: " + clientes.nombre + "\n";
+                datos += "TELEFONO: " + clientes.telefono + "\n";
+                datos += "PLAN ELEGIDO: " + clientes.nombre + "\n";
+                datos += "INICIO DEL PLAN: " + clientes.inicioPlan + "\n";
+                datos += "FIN DEL PLAN: " + clientes.finPlan + "\n";
+                datos += "----------------------- \n";
+                datos += "CLIENTES REGISTRADOS: " + totalClientes + "\n";
+                JOptionPane.showMessageDialog(this, datos);
+                        
+}   
+        private boolean validarEmail(String email) {
+            int cuentaArroba = 0;
+            
+            for(int i = 0; i < email.length(); i++) {
+                char caracter = email.charAt(i);
+                if(Character.isSpaceChar(caracter)) {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener espacios", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                if(caracter == '@') {
+                    ++ cuentaArroba;
+                }
+                if ( (caracter >= 33 & caracter <= 44) || (caracter == 47)
+                      || (caracter >= 58 && caracter <= 63)
+                      || (caracter >= 91 && caracter <= 94) 
+                      || (caracter == 96)
+                      || (caracter >= 123)
+                    )
+                {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener caracteres extraños", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                
+            }
+            if (email.startsWith("@") || email.endsWith("@")) {
+                    JOptionPane.showMessageDialog(this, "El email no puede empezar ni terminar con @", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+            }
+            if (cuentaArroba != 1) {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener varios arrobas", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                return true;
+                
+                
     }//GEN-LAST:event_btnGuardarActionPerformed
     //Desactivamos los caracteres en el campo de la cedula
     private void campoCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCedulaKeyTyped
@@ -252,8 +367,44 @@ public class VentanaClientes extends javax.swing.JDialog {
         if(!Character.isDigit(tecla)) {
             evt.consume();
         }
+        
+        
     }//GEN-LAST:event_campoCedulaKeyTyped
 
+    private void campoTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoTelefonoKeyTyped
+        char tecla = evt.getKeyChar();
+        if(!Character.isDigit(tecla)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_campoTelefonoKeyTyped
+
+    private void campoCedulaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoCedulaMouseClicked
+        cambiarColorCampo((JTextComponent)evt.getSource());
+    }//GEN-LAST:event_campoCedulaMouseClicked
+
+    private void campoNombreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoNombreMouseClicked
+        cambiarColorCampo((JTextComponent)evt.getSource());
+    }//GEN-LAST:event_campoNombreMouseClicked
+
+    private void campoApellidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoApellidoMouseClicked
+        cambiarColorCampo((JTextComponent)evt.getSource());
+    }//GEN-LAST:event_campoApellidoMouseClicked
+
+    private void campoCorreoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoCorreoMouseClicked
+        cambiarColorCampo((JTextComponent)evt.getSource());
+    }//GEN-LAST:event_campoCorreoMouseClicked
+
+    private void campoTelefonoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoTelefonoMouseClicked
+        cambiarColorCampo((JTextComponent)evt.getSource());
+    }//GEN-LAST:event_campoTelefonoMouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    public void cambiarColorCampo (JTextComponent campo) {
+            campo.setBackground(Color.WHITE);
+    }
     /**
      * @param args the command line arguments
      */
@@ -300,6 +451,8 @@ public class VentanaClientes extends javax.swing.JDialog {
         String dato = campo.getText();
         dato = dato.trim();
         if(dato.isEmpty()) {
+            campo.requestFocus();
+            campo.setBackground(Color.red);
             JOptionPane.showMessageDialog(this, mensaje, "Validar", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -327,7 +480,9 @@ public class VentanaClientes extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton radioPlanAnual;
     private javax.swing.JRadioButton radioPlanMensual;
+    private javax.swing.JTextArea txtDescripcionPlan;
     // End of variables declaration//GEN-END:variables
 }
