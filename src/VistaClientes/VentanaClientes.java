@@ -1,6 +1,6 @@
 package VistaClientes;
 
-import gestordeclientesgimnasio.Clientes;
+import gestordeclientesgimnasio.Cliente;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ import javax.swing.text.JTextComponent;
  * @author HP
  */
 public class VentanaClientes extends javax.swing.JDialog {
-    Clientes clientes = new Clientes();
+    //public static Cliente clientes = new Cliente();
     
-    List<Clientes> cliente = new ArrayList<>();
+    public static List<Cliente> clientes = new ArrayList<>();
     /**
      * Creates new form VentanaClientes
      */
@@ -284,15 +284,26 @@ public class VentanaClientes extends javax.swing.JDialog {
         /*Obtenemos las fechas, si estan uno de los dos campos vacios
         manda un mensaje de aviso
         */
-        clientes.inicioPlan = fechaInicioPlan.getDate();
-        clientes.finPlan = fechaFinPlan.getDate();
-        if(clientes.inicioPlan == null || clientes.finPlan == null) {
+
+        if(fechaInicioPlan == null || fechaFinPlan == null) {
             JOptionPane.showMessageDialog(this, "Fechas de plan no ingresado");
         }
+        
+        //Obtener Valores de los campos de textos
+        
+        String cedula = campoCedula.getText();
+        String nombre = campoNombre.getText();
+        String apellido = campoApellido.getText();
+        String correo = campoCorreo.getText();
+        String planElegido = (radioPlanMensual.isSelected()) ? radioPlanMensual.getText() : radioPlanAnual.getText();
+        String telefono = campoTelefono.getText();
+        Date inicioPlan = fechaInicioPlan.getDate();
+        Date finPlan = fechaFinPlan.getDate();
+        
         //Verifica que el telefono tenga un texto
-        clientes.telefono = campoTelefono.getText();
+
         try {
-            long tel = Integer.parseInt(clientes.telefono);
+            long tel = Integer.parseInt(telefono);
         }catch(NumberFormatException error){
             JOptionPane.showMessageDialog(this, "El telefono debe ser numerico", "Validar", JOptionPane.ERROR_MESSAGE);
             return;
@@ -300,30 +311,42 @@ public class VentanaClientes extends javax.swing.JDialog {
         if (!validarEmail(campoCorreo.getText())) {
             return;
         }
-        //Mostrar y recuperar todos los datos
-        //telefono, inicioPlan y finPlan ya están arriba
-        clientes.cedula = campoCedula.getText();
-        clientes.nombre = campoNombre.getText();
-        clientes.apellido = campoApellido.getText();
-        clientes.correo = campoCorreo.getText();
-        clientes.planElegido = (radioPlanMensual.isSelected())
-                                ? radioPlanMensual.getText()
-                                : radioPlanAnual.getText();
-        //Datos
-        cliente.add(clientes);
-        int totalClientes = cliente.size();
-        String datos = "CEDULA: " + clientes.cedula + "\n";
-                datos += "NOMBRE: " + clientes.nombre + "\n";
-                datos += "APELLIDO: " + clientes.apellido + "\n";
-                datos += "CORREO: " + clientes.correo + "\n";
-                datos += "TELEFONO: " + clientes.telefono + "\n";
-                datos += "PLAN ELEGIDO: " + clientes.planElegido + "\n";
-                datos += "INICIO DEL PLAN: " + clientes.inicioPlan + "\n";
-                datos += "FIN DEL PLAN: " + clientes.finPlan + "\n";
+        
+
+        
+        // Crear Instancia de Cliente
+        Cliente cliente = new Cliente(cedula, nombre, apellido, correo, planElegido, telefono, inicioPlan, finPlan);
+        // Agregar all arraylist
+        clientes.add(cliente);
+        
+        
+        // Mostar datos 
+        int totalClientes = clientes.size();
+        String datos = "CEDULA: " + cliente.cedula + "\n";
+                datos += "NOMBRE: " + cliente.nombre + "\n";
+                datos += "APELLIDO: " + cliente.apellido + "\n";
+                datos += "CORREO: " + cliente.correo + "\n";
+                datos += "TELEFONO: " + cliente.telefono + "\n";
+                datos += "PLAN ELEGIDO: " + cliente.planElegido + "\n";
+                datos += "INICIO DEL PLAN: " + cliente.inicioPlan + "\n";
+                datos += "FIN DEL PLAN: " + cliente.finPlan + "\n";
                 datos += "----------------------- \n";
                 datos += "CLIENTES REGISTRADOS: " + totalClientes + "\n";
                 JOptionPane.showMessageDialog(this, datos);
-                        
+    
+        // Limpiar  los campos 
+        campoCedula.setText("");
+        campoNombre.setText("");
+        campoApellido.setText("");
+        campoTelefono.setText("");
+        campoCorreo.setText("");
+        grupoPlanesGimnasio.clearSelection();
+        fechaInicioPlan.setDate(null);
+        fechaFinPlan.setDate(null);
+        
+        
+        
+        
 }   
         private boolean validarEmail(String email) {
             int cuentaArroba = 0;

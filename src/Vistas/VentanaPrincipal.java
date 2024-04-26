@@ -2,6 +2,7 @@ package Vistas;
 
 import VistaClientes.VentanaClientes;
 import javax.swing.DefaultListModel;
+import VistaClientes.DialogoEliminar;
 /**
  *
  * @author HP
@@ -127,6 +128,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
         // TODO add your handling code here:
+        DialogoEliminar ventanaEliminar = new DialogoEliminar(this, true);
+        ventanaEliminar.setLocationRelativeTo(this);
+        ventanaEliminar.setVisible(true);
     }//GEN-LAST:event_btnEliminarClienteActionPerformed
 
     private void btnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarClienteActionPerformed
