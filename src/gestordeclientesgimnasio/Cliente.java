@@ -20,17 +20,4 @@ public class Cliente {
     public String planElegido;
     public Date inicioPlan;
     public Date finPlan;
-    
-    public Cliente(String cedula, String nombre, String apellido, String correo, String telefono, String  planElegido, Date inicioPlan, Date finPlan){
-       this.cedula = cedula;
-       this.nombre = nombre;
-       this.apellido = apellido;
-       this.correo = correo;
-       this.telefono = telefono;
-       this.planElegido = planElegido;
-       this.inicioPlan = inicioPlan;
-       this.finPlan = finPlan;
-    }
-
-    
 }

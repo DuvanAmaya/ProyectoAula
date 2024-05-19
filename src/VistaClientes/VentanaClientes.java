@@ -1,10 +1,16 @@
 package VistaClientes;
 
+import Crud.ClienteCrud;
+import Vistas.VentanaPrincipal;
 import gestordeclientesgimnasio.Cliente;
+import gestordeclientesgimnasio.Principal;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -15,16 +21,24 @@ import javax.swing.text.JTextComponent;
  * @author HP
  */
 public class VentanaClientes extends javax.swing.JDialog {
-    //public static Cliente clientes = new Cliente();
-    
-    public static List<Cliente> clientes = new ArrayList<>();
-    /**
+    public ClienteCrud clienteCrud;
+    VentanaPrincipal ventana;
+        /**
      * Creates new form VentanaClientes
      */
     public VentanaClientes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        clienteCrud = Principal.clienteCrud;
     }
+
+    public void setVentanaPrincipal(VentanaPrincipal ventana) {
+        this.ventana = ventana;
+    }
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -87,6 +101,11 @@ public class VentanaClientes extends javax.swing.JDialog {
         campoCedula.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 campoCedulaMouseClicked(evt);
+            }
+        });
+        campoCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoCedulaActionPerformed(evt);
             }
         });
         campoCedula.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -165,7 +184,7 @@ public class VentanaClientes extends javax.swing.JDialog {
                     .addComponent(campoTelefono)
                     .addComponent(fechaInicioPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fechaFinPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -230,10 +249,6 @@ public class VentanaClientes extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(204, 204, 204)
-                .addComponent(jLabel1)
-                .addGap(0, 314, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -243,19 +258,23 @@ public class VentanaClientes extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(btnCancelar)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(265, 265, 265))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(10, 10, 10)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnCancelar))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -274,6 +293,9 @@ public class VentanaClientes extends javax.swing.JDialog {
         if(!validarDatosEnCampo(campoCorreo, "Digite el correo")) {
         return;
         }
+        if (!validarEmail(campoCorreo.getText())) {
+            return;
+        }
         if(!validarDatosEnCampo(campoTelefono, "Digite el telefono")) {
         return;
         }
@@ -281,108 +303,77 @@ public class VentanaClientes extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Elegir un plan");
             return;
         }
+        
+        Cliente cliente = new Cliente();
+        cliente.cedula = campoCedula.getText().trim();
+        cliente.nombre = campoNombre.getText().trim();
+        cliente.apellido = campoApellido.getText().trim();
+        cliente.correo = campoCorreo.getText().trim();
+        cliente.telefono = campoTelefono.getText().trim();
+        String planElegido = (radioPlanMensual.isSelected()) ? radioPlanMensual.getText() : radioPlanAnual.getText();
+        cliente.planElegido = planElegido.trim();
+        cliente.inicioPlan = fechaInicioPlan.getDate();
+        cliente.finPlan = fechaFinPlan.getDate();
+        
         /*Obtenemos las fechas, si estan uno de los dos campos vacios
         manda un mensaje de aviso
         */
 
-        if(fechaInicioPlan == null || fechaFinPlan == null) {
-            JOptionPane.showMessageDialog(this, "Fechas de plan no ingresado");
-        }
-        
-        //Obtener Valores de los campos de textos
-        
-        String cedula = campoCedula.getText();
-        String nombre = campoNombre.getText();
-        String apellido = campoApellido.getText();
-        String correo = campoCorreo.getText();
-        String planElegido = (radioPlanMensual.isSelected()) ? radioPlanMensual.getText() : radioPlanAnual.getText();
-        String telefono = campoTelefono.getText();
-        Date inicioPlan = fechaInicioPlan.getDate();
-        Date finPlan = fechaFinPlan.getDate();
-        
-        //Verifica que el telefono tenga un texto
-
-        try {
-            long tel = Integer.parseInt(telefono);
-        }catch(NumberFormatException error){
-            JOptionPane.showMessageDialog(this, "El telefono debe ser numerico", "Validar", JOptionPane.ERROR_MESSAGE);
+        if(cliente.inicioPlan == null) {
+            JOptionPane.showMessageDialog(this, "Fecha de inicio del plan no ingresado");
             return;
         }
-        if (!validarEmail(campoCorreo.getText())) {
+        if(cliente.finPlan == null) {
+            JOptionPane.showMessageDialog(this, "Fecha de la finalizacion del plan no ingresado");
             return;
         }
         
+        String archivoCSV = "C:\\Users\\HP\\OneDrive\\Documentos\\GitHub\\ProyectoAula\\clientes.csv";
+        String variableAComprobar = cliente.cedula; // Cambia esto al valor que deseas comprobar
 
-        
-        // Crear Instancia de Cliente
-        Cliente cliente = new Cliente(cedula, nombre, apellido, correo, planElegido, telefono, inicioPlan, finPlan);
-        // Agregar all arraylist
-        clientes.add(cliente);
-        
-        
-        // Mostar datos 
-        int totalClientes = clientes.size();
-        String datos = "CEDULA: " + cliente.cedula + "\n";
-                datos += "NOMBRE: " + cliente.nombre + "\n";
-                datos += "APELLIDO: " + cliente.apellido + "\n";
-                datos += "CORREO: " + cliente.correo + "\n";
-                datos += "TELEFONO: " + cliente.telefono + "\n";
-                datos += "PLAN ELEGIDO: " + cliente.planElegido + "\n";
-                datos += "INICIO DEL PLAN: " + cliente.inicioPlan + "\n";
-                datos += "FIN DEL PLAN: " + cliente.finPlan + "\n";
-                datos += "----------------------- \n";
-                datos += "CLIENTES REGISTRADOS: " + totalClientes + "\n";
-                JOptionPane.showMessageDialog(this, datos);
-    
-        // Limpiar  los campos 
-        campoCedula.setText("");
-        campoNombre.setText("");
-        campoApellido.setText("");
-        campoTelefono.setText("");
-        campoCorreo.setText("");
-        grupoPlanesGimnasio.clearSelection();
-        fechaInicioPlan.setDate(null);
-        fechaFinPlan.setDate(null);
-        
-        
-        
-        
-}   
-        private boolean validarEmail(String email) {
-            int cuentaArroba = 0;
-            
-            for(int i = 0; i < email.length(); i++) {
-                char caracter = email.charAt(i);
-                if(Character.isSpaceChar(caracter)) {
-                    JOptionPane.showMessageDialog(this, "El email no puede tener espacios", "Validar", JOptionPane.ERROR_MESSAGE);
-                    return false;
+        boolean existe = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+
+                // Comparar el valor con la primera columna
+                if (datos.length > 0 && datos[0].equals(variableAComprobar)) {
+                    existe = true;
+                    break; // No es necesario seguir leyendo una vez que encontramos la variable
                 }
-                if(caracter == '@') {
-                    ++ cuentaArroba;
-                }
-                if ( (caracter >= 33 & caracter <= 44) || (caracter == 47)
-                      || (caracter >= 58 && caracter <= 63)
-                      || (caracter >= 91 && caracter <= 94) 
-                      || (caracter == 96)
-                      || (caracter >= 123)
-                    )
-                {
-                    JOptionPane.showMessageDialog(this, "El email no puede tener caracteres extraños", "Validar", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-                
             }
-            if (email.startsWith("@") || email.endsWith("@")) {
-                    JOptionPane.showMessageDialog(this, "El email no puede empezar ni terminar con @", "Validar", JOptionPane.ERROR_MESSAGE);
-                    return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (existe) {
+        JOptionPane.showMessageDialog(this,"Cliente ya registrado");
+        } else {
+            try {
+                PrintWriter writer = new PrintWriter(new FileWriter("clientes.csv", true));
+                // Escribir los datos en formato CSV
+                writer.printf("%s,%s,%s,%s,%s,%s,%s,%s%n",
+                        cliente.cedula,
+                        cliente.nombre,
+                        cliente.apellido,
+                        cliente.correo,
+                        cliente.telefono,
+                        cliente.planElegido,
+                        cliente.inicioPlan,
+                        cliente.finPlan);
+                writer.close();
+                ventana.agregarFila(cliente);
+                JOptionPane.showMessageDialog(null, "Datos guardados correctamente.");
+                System.out.println("Datos guardados correctamente.");
+            } catch (IOException ex) {
+                System.err.println("Error al guardar los datos: " + ex.getMessage());
             }
-            if (cuentaArroba != 1) {
-                    JOptionPane.showMessageDialog(this, "El email no puede tener varios arrobas", "Validar", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-                return true;
-                
-                
+
+        }
+           limpiarCampos();
+ 
     }//GEN-LAST:event_btnGuardarActionPerformed
     //Desactivamos los caracteres en el campo de la cedula
     private void campoCedulaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCedulaKeyTyped
@@ -424,6 +415,10 @@ public class VentanaClientes extends javax.swing.JDialog {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void campoCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCedulaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoCedulaActionPerformed
 
     public void cambiarColorCampo (JTextComponent campo) {
             campo.setBackground(Color.WHITE);
@@ -481,6 +476,52 @@ public class VentanaClientes extends javax.swing.JDialog {
         }
         return true;
     }
+    
+    private boolean validarEmail(String email) {
+            int cuentaArroba = 0;
+            
+            for(int i = 0; i < email.length(); i++) {
+                char caracter = email.charAt(i);
+                if(Character.isSpaceChar(caracter)) {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener espacios", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                if(caracter == '@') {
+                    ++ cuentaArroba;
+                }
+                if ( (caracter >= 33 & caracter <= 44) || (caracter == 47)
+                      || (caracter >= 58 && caracter <= 63)
+                      || (caracter >= 91 && caracter <= 94) 
+                      || (caracter == 96)
+                      || (caracter >= 123)
+                    ) {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener caracteres extraños", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                
+            }
+            if (email.startsWith("@") || email.endsWith("@")) {
+                    JOptionPane.showMessageDialog(this, "El email no puede empezar ni terminar con @", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+            }
+            if (cuentaArroba != 1) {
+                    JOptionPane.showMessageDialog(this, "El email no puede tener varios arrobas", "Validar", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                return true;
+    }
+    
+    // Limpiar  los campos 
+    public void limpiarCampos() {
+        campoCedula.setText("");
+        campoNombre.setText("");
+        campoApellido.setText("");
+        campoTelefono.setText("");
+        campoCorreo.setText("");
+        grupoPlanesGimnasio.clearSelection();
+        fechaInicioPlan.setDate(null);
+        fechaFinPlan.setDate(null);
+        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
