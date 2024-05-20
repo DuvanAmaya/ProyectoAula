@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author HP
  */
-public class Clientes {
+public class Cliente {
     public String cedula;
     public String nombre;
     public String apellido;
@@ -20,6 +20,4 @@ public class Clientes {
     public String planElegido;
     public Date inicioPlan;
     public Date finPlan;
-
-    
 }
