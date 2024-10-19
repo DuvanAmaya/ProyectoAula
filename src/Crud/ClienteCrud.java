@@ -12,12 +12,12 @@ public class ClienteCrud {
         bdClientes = new HashMap<>();
     }
     public int agregarCliente(Cliente cliente) throws Exception {
-        if(bdClientes.containsKey(cliente.cedula)){
-            String mensaje = "El cliente con la cedula "+ cliente.cedula 
+        if(bdClientes.containsKey(cliente.getCedula())){
+            String mensaje = "El cliente con la cedula "+ cliente.getCedula() 
                               + " Ya existe";
             throw new Exception(mensaje);
         }
-        bdClientes.put(cliente.cedula, cliente);
+        bdClientes.put(cliente.getCedula(), cliente);
         return bdClientes.size();
     }
     
@@ -31,12 +31,12 @@ public class ClienteCrud {
     }
     
     public void editarCliente(Cliente cliente) throws Exception{
-        if(!bdClientes.containsKey(cliente.cedula)){
-            String mensaje = "El cliente con la cedula "+ cliente.cedula 
+        if(!bdClientes.containsKey(cliente.getCedula())){
+            String mensaje = "El cliente con la cedula "+ cliente.getCedula() 
                               + " NO existe";
             throw new Exception(mensaje);
         }
-        bdClientes.put(cliente.cedula, cliente);
+        bdClientes.put(cliente.getCedula(), cliente);
     }
     
     public int eliminarNegociante(String cedula) throws Exception{
