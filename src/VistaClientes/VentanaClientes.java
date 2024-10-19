@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -144,15 +144,25 @@ public class VentanaClientes extends javax.swing.JDialog {
         });
 
         grupoPlanesGimnasio.add(radioPlanMensual);
-        radioPlanMensual.setText("PLAN MENSUAL");
+        radioPlanMensual.setText("PLAN MENSUAL $60.000");
+        radioPlanMensual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioPlanMensualActionPerformed(evt);
+            }
+        });
 
         grupoPlanesGimnasio.add(radioPlanAnual);
-        radioPlanAnual.setText("PLAN ANUAL");
+        radioPlanAnual.setText("PLAN ANUAL $700.000");
+        radioPlanAnual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioPlanAnualActionPerformed(evt);
+            }
+        });
 
         txtDescripcionPlan.setEditable(false);
         txtDescripcionPlan.setColumns(20);
         txtDescripcionPlan.setRows(5);
-        txtDescripcionPlan.setText("Planes Disponibles:\n\n--- Plan Mensual ---\n\n-- Duración del plan: 30 días.\n\n-- Precio: $60.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,\nzona de masajes.\n\n--- Plan Anual ---\n\n-- Duración del plan: 1 año.\n\n-- Precio: $60.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,saunas,\nzona de masajes.");
+        txtDescripcionPlan.setText("Planes Disponibles:\n\n--- Plan Mensual ---\n\n-- Duración del plan: 30 días.\n\n-- Precio: $60.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,\nzona de masajes.\n\n--- Plan Anual ---\n\n-- Duración del plan: 1 año.\n\n-- Precio: $700.000\n\n-- Descripción del plan: \nAcceso a nuestros servicios: Duchas,\nparqueadero, comedor,saunas,\nzona de masajes.");
         txtDescripcionPlan.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(txtDescripcionPlan);
 
@@ -172,19 +182,19 @@ public class VentanaClientes extends javax.swing.JDialog {
                     .addComponent(jLabel3)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(radioPlanMensual)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(radioPlanAnual))
                     .addComponent(campoCedula)
                     .addComponent(campoNombre)
                     .addComponent(campoApellido)
                     .addComponent(campoCorreo)
                     .addComponent(campoTelefono)
-                    .addComponent(fechaInicioPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fechaInicioPlan, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                     .addComponent(fechaFinPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -215,10 +225,11 @@ public class VentanaClientes extends javax.swing.JDialog {
                             .addComponent(jLabel6)
                             .addComponent(campoTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(radioPlanMensual)
-                            .addComponent(radioPlanAnual))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(radioPlanAnual, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel7)
+                                .addComponent(radioPlanMensual)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel8)
@@ -304,48 +315,77 @@ public class VentanaClientes extends javax.swing.JDialog {
             return;
         }
         
+        /*Creamos una instancia llamadando al constructor de la clase Cliente
+        para crear un nuevo objeto cliente */
         Cliente cliente = new Cliente();
-        cliente.cedula = campoCedula.getText().trim();
-        cliente.nombre = campoNombre.getText().trim();
-        cliente.apellido = campoApellido.getText().trim();
-        cliente.correo = campoCorreo.getText().trim();
-        cliente.telefono = campoTelefono.getText().trim();
-        String planElegido = (radioPlanMensual.isSelected()) ? radioPlanMensual.getText() : radioPlanAnual.getText();
-        cliente.planElegido = planElegido.trim();
-        cliente.inicioPlan = fechaInicioPlan.getDate();
-        cliente.finPlan = fechaFinPlan.getDate();
+//        cliente.getCedula() = campoCedula.getText().trim();
+//        cliente.nombre = campoNombre.getText().trim();
+//        cliente.apellido = campoApellido.getText().trim();
+//        cliente.correo = campoCorreo.getText().trim();
+//        cliente.telefono = campoTelefono.getText().trim();
+//        String planElegido = (radioPlanMensual.isSelected()) ? radioPlanMensual.getText() : radioPlanAnual.getText();
+//        cliente.planElegido = planElegido.trim();
+//        cliente.inicioPlan = fechaInicioPlan.getDate();
+//        cliente.finPlan = fechaFinPlan.getDate();
         
+        if (cliente.getTelefono().length() <= 9 || cliente.getTelefono().length() >= 15) {
+            JOptionPane.showMessageDialog(this, "El número de teléfono debe tener entre 10 y 15 dígitos.");
+            return;
+        }
         /*Obtenemos las fechas, si estan uno de los dos campos vacios
         manda un mensaje de aviso
         */
-
-        if(cliente.inicioPlan == null) {
+        if(cliente.getInicioPlan() == null) {
             JOptionPane.showMessageDialog(this, "Fecha de inicio del plan no ingresado");
             return;
         }
-        if(cliente.finPlan == null) {
+        if(cliente.getFinPlan() == null) {
             JOptionPane.showMessageDialog(this, "Fecha de la finalizacion del plan no ingresado");
             return;
         }
         
+        if(radioPlanMensual.isSelected()) {
+            long diferenciaEnMilisegundos = cliente.getFinPlan().getTime() - cliente.getInicioPlan().getTime();
+            long dias = diferenciaEnMilisegundos / (1000 * 60 * 60 * 24);
+            if (dias < 30) {
+            JOptionPane.showMessageDialog(this, "La diferencia entre las fechas debe ser de al menos 30 días.");
+            return;
+            }
+        }
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(cliente.getInicioPlan());
+        calendar.add(Calendar.YEAR, 1);
+        Date fechaLimite = calendar.getTime();
+
+        // Verificar que la fecha de fin sea al menos un año después de la fecha de inicio
+        if(radioPlanAnual.isSelected()) {
+            if (cliente.getFinPlan().before(fechaLimite)) {
+            JOptionPane.showMessageDialog(this, "La fecha de finalización del plan debe ser al menos un año después de la fecha de inicio.");
+            return;
+            }
+        }
+        //Declara una variable de tipo String para almacenar la ruta del archivo.
         String archivoCSV = "C:\\Users\\HP\\OneDrive\\Documentos\\GitHub\\ProyectoAula\\clientes.csv";
-        String variableAComprobar = cliente.cedula; // Cambia esto al valor que deseas comprobar
+        String variableAComprobar = cliente.getCedula(); // Cambia esto al valor que deseas comprobar
 
         boolean existe = false;
-
+        
+        //para leer el archivo CSV utilizando la ruta especificada en archivoCSV.
         try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
 
-                // Comparar el valor con la primera columna
+                /*Comprueba si el array datos tiene al menos un elemento y si el
+                primer elemento del array es igual al valor de variableAComprobar.*/
                 if (datos.length > 0 && datos[0].equals(variableAComprobar)) {
                     existe = true;
-                    break; // No es necesario seguir leyendo una vez que encontramos la variable
+                    break;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //imprime el error de la excepcion
         }
 
         if (existe) {
@@ -355,14 +395,14 @@ public class VentanaClientes extends javax.swing.JDialog {
                 PrintWriter writer = new PrintWriter(new FileWriter("clientes.csv", true));
                 // Escribir los datos en formato CSV
                 writer.printf("%s,%s,%s,%s,%s,%s,%s,%s%n",
-                        cliente.cedula,
-                        cliente.nombre,
-                        cliente.apellido,
-                        cliente.correo,
-                        cliente.telefono,
-                        cliente.planElegido,
-                        cliente.inicioPlan,
-                        cliente.finPlan);
+                        cliente.getCedula(),
+                        cliente.getNombre(),
+                        cliente.getApellido(),
+                        cliente.getCorreo(),
+                        cliente.getTelefono(),
+                        cliente.getPlanElegido(),
+                        cliente.getInicioPlan(),
+                        cliente.getFinPlan());
                 writer.close();
                 ventana.agregarFila(cliente);
                 JOptionPane.showMessageDialog(null, "Datos guardados correctamente.");
@@ -420,6 +460,14 @@ public class VentanaClientes extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoCedulaActionPerformed
 
+    private void radioPlanAnualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPlanAnualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioPlanAnualActionPerformed
+
+    private void radioPlanMensualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioPlanMensualActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioPlanMensualActionPerformed
+
     public void cambiarColorCampo (JTextComponent campo) {
             campo.setBackground(Color.WHITE);
     }
@@ -465,6 +513,7 @@ public class VentanaClientes extends javax.swing.JDialog {
         });
     }
     
+    //Valida si un campo esta vacio o no.
     private boolean validarDatosEnCampo(JTextField campo, String mensaje) {
         String dato = campo.getText();
         dato = dato.trim();
@@ -505,7 +554,7 @@ public class VentanaClientes extends javax.swing.JDialog {
                     return false;
             }
             if (cuentaArroba != 1) {
-                    JOptionPane.showMessageDialog(this, "El email no puede tener varios arrobas", "Validar", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "El email debe tener un solo arroba", "Validar", JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
                 return true;
